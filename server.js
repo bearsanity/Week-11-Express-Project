@@ -15,7 +15,7 @@ app.use(express.json());
 
 //===================== Routes =====================
 app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'notes.html'));
+    res.sendFile(path.join(__dirname, 'public', 'notes.html'));
 });
 
 app.get('/api/notes', (req, res) => {
@@ -34,6 +34,20 @@ app.post('/api/notes', (req, res) => {
     const newArray = JSON.stringify(notesArrayParsed);
     fs.writeFileSync(DB_PATH, newArray);
     res.send(newNote);
+});
+
+app.delete('/api/notes/:id', (req, res) => {
+    const noteId = req.params.id;
+    const notesArray = fs.readFileSync(DB_PATH, 'utf8');
+    const notesArrayParsed = JSON.parse(notesArray);
+    const filteredNotes = notesArrayParsed.filter(note => noteId !== note.id);
+    const newArray = JSON.stringify(filteredNotes);
+    fs.writeFileSync(DB_PATH, newArray);
+    res.send('Note Deleted!');
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
