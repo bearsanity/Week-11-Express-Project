@@ -9,7 +9,7 @@ const DB_PATH  = path.join(__dirname, 'db/db.json'); //path to notes database. w
 const PORT = process.env.PORT || 3001;
 
 //===================== Middleware =====================
-app.use('/assets', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 
@@ -19,7 +19,7 @@ app.get('/notes', (req, res) => {
 });
 
 app.get('/api/notes', (req, res) => {
-    const notesData = fs.readFileSync(path.join(__dirname, 'db/db.json'), 'utf8');
+    const notesData = fs.readFileSync(DB_PATH, 'utf8');
     const notesDataParsed = JSON.parse(notesData);
     res.json(notesDataParsed);
 });
@@ -46,10 +46,12 @@ app.delete('/api/notes/:id', (req, res) => {
     res.send('Note Deleted!');
 });
 
+//Catch all route at the end so it doesn't overwrite the others
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+//Start server
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
