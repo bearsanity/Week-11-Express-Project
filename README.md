@@ -53,6 +53,7 @@ You can then access all your created notes on the left side bar. Use the trash c
 ## Credits
 
 server.js written by @bearsanity
+
 Everything else provided by Roger Le
 
 
